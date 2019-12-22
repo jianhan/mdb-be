@@ -1,9 +1,9 @@
-import { gql } from 'apollo-server';
+import { gql } from "apollo-server";
 
 export default gql`
   type Query {
     """
-    Test Message. 
+    Test Message.
     """
     testMessage: String!
   }

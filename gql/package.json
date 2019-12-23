@@ -6,9 +6,10 @@
   "scripts": {
     "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build:production": "node_modules/.bin/webpack --config webpack.production.js",
     "build:development": "node_modules/.bin/webpack --config webpack.development.js",
+    "build:development:watch": "node_modules/.bin/webpack --config webpack.development.watch.js",
     "build:stage": "node_modules/.bin/webpack --config webpack.stage.js",
+    "build:production": "node_modules/.bin/webpack --config webpack.production.js",
     "start": "node dist/server",
     "start:env": "node --require dotenv/config dist/server"
   },

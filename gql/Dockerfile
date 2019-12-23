@@ -50,8 +50,8 @@ COPY . /src
 # Create app directory
 WORKDIR /src
 
-RUN npm ci &&\
-    npm run build:production &&\
+RUN npm install &&\
+    npm run build:development &&\
     npm run lint &&\
     npm run test
 

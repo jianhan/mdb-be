@@ -1,40 +1,4 @@
-## ---- Dependencies ----
-#FROM node:alpine AS base
-#
-## copy project file
-#COPY package.json .
-#
-## install node packages
-#RUN npm set progress=false && npm config set depth 0
-#
-## only install dep not dev
-#RUN npm install --only=production
-#
-## copy production node_modules aside
-#RUN cp -R node_modules prod_node_modules
-#
-## install ALL node_modules, including 'devDependencies'
-#RUN npm install &&\
-#    npm build
-#
-## ---- Test ----
-## run linters, setup and tests
-#FROM base AS test
-#COPY . .
-#RUN  npm run lint && npm run test
-#
-## ---- Release ----
-#FROM base AS release
-## copy production node_modules
-#COPY --from=base /root/gql/prod_node_modules ./node_modules
-## copy app sources
-#COPY . .
-## expose port and define CMD
-#EXPOSE 4001
-#CMD [ "npm", "start" ]
-
-FROM node:11-alpine AS build
-
+FROM node:11-alpine AS base
 LABEL version="1.0"
 LABEL description=""
 LABEL maintainer="JianHan jianhan@mail.com"
@@ -45,26 +9,34 @@ RUN apk add --update --no-cache \
     make \
     g++
 
+# copy all files over to src
 COPY . /src
 
-# Create app directory
+# set work dir
 WORKDIR /src
 
-RUN npm install &&\
-    npm run build:development &&\
-    npm run lint &&\
-    npm run test
+# install packages
+RUN npm install && npm run build:development
 
-RUN npm prune --production
+# ------------------lint build stage-------------------------
+FROM base AS lint
+COPY . .
+RUN npm run lint
 
+# ------------------test build stage-------------------------
+FROM base AS test
+COPY . .
+RUN npm run test
+
+# ------------------production build stage-------------------------
 FROM node:11.10.0-alpine
 
 EXPOSE 4001
 WORKDIR /usr/src/gql
 
-COPY --from=build /src/node_modules node_modules
-COPY --from=build /src/dist dist
-COPY --from=build /src/package.json package.json
+COPY --from=base /src/dist dist
+COPY --from=base /src/package.json package.json
+RUN npm i --production
 
 CMD [ "npm", "start" ]
 

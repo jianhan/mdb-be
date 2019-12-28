@@ -7,7 +7,7 @@
     "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
     "clean": "rm -rf dist",
     "build": "tsc",
-    "build:zip": "npm run clean && npm run build && cd dist && cp ../package.json . && npm i --production && zip -r lambda.zip ."
+    "build:zip": "npm run clean && npm run build && cd dist && cp ../package.json . && npm i --production && rm *.json && zip -r lambda.zip ."
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,23 @@
+{
+  "name": "hn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
+    "build": "rm -rfv dist && tsc",
+    "build:zip":
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.39",
+    "@types/jest": "^24.0.24",
+    "@types/node": "^13.1.0",
+    "@types/typescript": "^2.0.0",
+    "tslint": "^5.20.1",
+    "tslint-clean-code": "^0.2.10",
+    "tslint-sonarts": "^1.9.0"
+  }
+}

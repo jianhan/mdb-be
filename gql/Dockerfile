@@ -39,5 +39,3 @@ COPY --from=base /src/package.json package.json
 RUN npm i --production
 
 CMD [ "npm", "start" ]
-
-

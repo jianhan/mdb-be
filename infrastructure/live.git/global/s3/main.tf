@@ -38,7 +38,7 @@ locals {
 # CREATE S3 BUCKET FOR STATE
 # ------------------------------------------------------------------------------
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "${var.resource_prefix}-state-bucket"
+  bucket = "mdb-state"
   # Enable versioning so we can see the full revision history of our
   # state files
   # This block enables versioning on the S3 bucket, so that every update to a file in the bucket
@@ -70,7 +70,7 @@ resource "aws_s3_bucket" "terraform_state" {
 # CREATE DYNAMODB TABLE FOR TERRAFORM LOCKS
 # ------------------------------------------------------------------------------
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "${var.resource_prefix}-terraform-locks"
+  name         = "terraform_locks"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {

@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
-    "build": "rm -rfv dist && tsc",
-    "build:zip":
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "build:zip": "npm run clean && npm run build && cd dist && cp ../package.json . && npm i --production && zip -r lambda.zip ."
   },
   "keywords": [],
   "author": "",

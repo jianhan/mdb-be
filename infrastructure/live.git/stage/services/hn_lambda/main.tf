@@ -27,7 +27,7 @@ provider "aws" {
 # DEPLOY THE LAMBDA FUNCTION
 # ------------------------------------------------------------------------------
 module "hn_lambda" {
-  source = "../../../../modules.git/services/hn_lambda"
+  source = "github.com/jianhan/mdb-infrastructure-modules//services/hn_lambda?ref=v1.0.0"
   filename = "lambda.zip"
   env_prefix = "stage"
   handler = "handler.handler"

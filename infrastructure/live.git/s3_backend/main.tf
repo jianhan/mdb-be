@@ -53,7 +53,7 @@ resource "aws_s3_bucket" "terraform_state" {
       # this S3 bucket. This ensures that your state files, and any secrets they may contain, are always encrypted on disk when stored in S3.
       # apply_server_side_encryption_by_default
       apply_server_side_encryption_by_default {
-        sse_algorithm = var.s3_sse_algorithm
+        sse_algorithm = "AES256"
       }
     }
   }

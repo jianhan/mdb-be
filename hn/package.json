@@ -14,11 +14,24 @@
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.39",
+    "@types/axios": "^0.14.0",
+    "@types/cheerio": "^0.22.15",
     "@types/jest": "^24.0.24",
+    "@types/lodash": "^4.14.149",
     "@types/node": "^13.1.0",
+    "@types/ramda": "^0.26.39",
     "@types/typescript": "^2.0.0",
     "tslint": "^5.20.1",
     "tslint-clean-code": "^0.2.10",
     "tslint-sonarts": "^1.9.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "lodash": "^4.17.15",
+    "ramda": "^0.26.1",
+    "ramda-extension": "^0.10.1",
+    "ramda-fantasy": "^0.8.0",
+    "rxjs": "^6.5.4"
   }
 }

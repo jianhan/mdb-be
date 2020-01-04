@@ -6,3 +6,5 @@ terraform.tfstate.backup
 dist
 node_modules
 *.zip
+logs
+coverage

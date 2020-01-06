@@ -31,6 +31,6 @@ module.exports = {
     "!**/vendor/**"
   ],
   "coveragePathIgnorePatterns": ["/node_modules/"],
-  "coverageDirectory": "dist/coverage",
+  "coverageDirectory": "coverage",
   "collectCoverage": true
 };

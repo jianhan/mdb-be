@@ -1,22 +1,15 @@
 import {IsIn, IsNotEmpty, IsString, validate} from "class-validator";
 import {Map} from "immutable";
 import ProcessEnv = NodeJS.ProcessEnv;
-
-// define type for different environments.
-export enum Environment {
-    Development = "development",
-    Stage = "stage",
-    UAT = "uat",
-    PRODUCTION = "production",
-}
+import {enumValues, Environment} from "./constants";
 
 // define environment variables.
 export class Envs {
-    @IsIn(["development", "stage", "uat", "production"])
+    @IsIn(enumValues(Environment), {message: `NODE_ENV must be in ${enumValues(Environment)}`})
     public NODE_ENV?: string;
 
-    @IsNotEmpty()
-    @IsString()
+    @IsNotEmpty({message: "SERVICE_NAME must not be empty."})
+    @IsString({message: "SERVICE_NAME must be string"})
     public SERVICE_NAME?: string;
 }
 

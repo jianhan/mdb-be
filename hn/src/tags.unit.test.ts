@@ -1,15 +1,19 @@
 import fs from "fs";
+import {Map} from "immutable";
 import path from "path";
 import R from "ramda";
-import {tagsExtractor} from "./extractors";
-import {Environment, getEnvs} from "./envs";
-import {createLogger} from "./logger";
-import {Map} from "immutable";
 import {Logger} from "winston";
+import {getEnvs} from "./envs";
+import {createLogger} from "./logger";
+import {tagsExtractor} from "./tags";
+import {Environment} from "./constants";
+import jsc from "jsverify";
+import _ = require("lodash");
 
 interface ITagsObj {
     expectedTags: string[];
 }
+
 const jsonStrToObj = (json: string): ITagsObj => JSON.parse(json) as ITagsObj;
 const extractTagsFromObj = (o: ITagsObj): string[] => o.expectedTags;
 const readFileByPath = (e: string) => (p: string): string => fs.readFileSync(p, e);
@@ -23,7 +27,7 @@ describe("tagsExtractor function", () => {
 
     // setup variables before each tests
     beforeEach(async () => {
-        envs = await getEnvs({NODE_ENV: process.env.NODE_ENV, SERVICE_NAME: "hn"});
+        envs = await getEnvs({NODE_ENV: Environment.DEVELOPMENT as string, SERVICE_NAME: "hn"});
         pathPrefixFunc = R.partial(path.join, [__dirname, "__tests__"]);
         logger = createLogger(envs.get("NODE_ENV") as Environment, envs.get("SERVICE_NAME") as string);
     });
@@ -38,8 +42,13 @@ describe("tagsExtractor function", () => {
     });
 
     it("should return empty array with invalid html", () => {
-        const actualTags = tagsExtractor("invalidHtml", logger);
-        expect([]).toEqual(actualTags);
+        jsc.assert(jsc.forall(
+            jsc.array(jsc.string),
+            (arr: string[]): boolean => {
+                console.log(arr, "----");
+                return tagsExtractor(_.join(arr, " "), logger).length === 0;
+            },
+        ));
     });
 
 });

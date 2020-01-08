@@ -1,35 +1,36 @@
+import {Either, left, right} from "fp-ts/lib/Either";
 import {fromJS} from "immutable";
 import winston, {Logger} from "winston";
-import {Environment} from "./constants";
+import {Environment, LogLevel} from "./constants";
 
-
-// logLevel defines different log level for different environment.
-const logLevel = (environment: Environment): string => {
+// getLogLevel defines different log level for different environment.
+export const getLogLevel = (environment: Environment): Either<Error, LogLevel> => {
     switch (environment) {
         case Environment.DEVELOPMENT:
         case Environment.STAGE:
         case Environment.UAT:
-            return "debug";
+            return right(LogLevel.DEBUG);
         case Environment.PRODUCTION:
-            return "info";
+            return right(LogLevel.INFO);
     }
-    throw new Error("unknown environment");
+
+    return left(new Error("unknown environment"));
 };
 
 // createLogger creates a new logger.
-export const createLogger = (environment: Environment, service: string): Logger => {
+export const createLogger = (environment: Environment, service: string, level: string): Logger => {
     const l = winston.createLogger({
-        level: logLevel(environment),
+        level,
         silent: false,
         format: winston.format.json(),
         defaultMeta: {service, environment},
         transports: [
-            new winston.transports.File({filename: "logs/error.log", level: logLevel(environment)}),
+            new winston.transports.File({filename: "logs/error.log", level}),
             new winston.transports.File({filename: "logs/combined.log"}),
         ],
     });
 
-    if (environment !== "production") {
+    if (environment !== Environment.PRODUCTION) {
         l.add(new winston.transports.Console({
             format: winston.format.simple(),
         }));
@@ -37,3 +38,7 @@ export const createLogger = (environment: Environment, service: string): Logger 
 
     return fromJS(l);
 };
+
+// const createLoggerByEnv = R.partial(createLogger, [Environment.PRODUCTION, "test"]);
+//
+// either.map(getLogLevel(Environment.PRODUCTION), createLoggerByEnv);

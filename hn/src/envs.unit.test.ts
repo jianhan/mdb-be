@@ -1,8 +1,8 @@
+import {ValidationError} from "class-validator";
 import {Map} from "immutable";
 import jsc from "jsverify";
 import {Environment} from "./constants";
 import {getEnvs} from "./envs";
-import {ValidationError} from "class-validator";
 
 describe("getEnvs function", () => {
 

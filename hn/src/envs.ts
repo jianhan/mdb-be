@@ -8,9 +8,21 @@ export class Envs {
     @IsIn(enumValues(Environment), {message: `NODE_ENV must be in ${enumValues(Environment)}`})
     public NODE_ENV?: string;
 
-    @IsNotEmpty({message: "SERVICE_NAME must not be empty."})
-    @IsString({message: "SERVICE_NAME must be string"})
+    @IsNotEmpty()
+    @IsString()
     public SERVICE_NAME?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public S3_ACCESS_KEY_ID?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public S3_SECRET_ACCESS_KEY?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public S3_BUCKET_NAME?: string;
 }
 
 // getEnvs retrieves environment variables.

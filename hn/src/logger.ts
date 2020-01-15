@@ -1,7 +1,15 @@
-import {Either, left, right} from "fp-ts/lib/Either";
+import {either, Either, left, right} from "fp-ts/lib/Either";
 import {fromJS} from "immutable";
+import R from "ramda";
 import winston, {Logger} from "winston";
 import {Environment, LogLevel} from "./constants";
+
+export const createLoggerByEnvMap = (m: any): Either<Error, Logger> => {
+    return either.map(
+        getLogLevel(m.get("NODE_ENV") as Environment),
+        R.curry(createLogger)(m.get("NODE_ENV") as Environment, m.get("SERVICE_NAME") as string),
+    );
+};
 
 // getLogLevel defines different log level for different environment.
 export const getLogLevel = (environment: Environment): Either<Error, LogLevel> => {
@@ -14,7 +22,7 @@ export const getLogLevel = (environment: Environment): Either<Error, LogLevel> =
             return right(LogLevel.INFO);
     }
 
-    return left(new Error("unknown environment"));
+    return left(new Error(`unknown environment ${environment}`));
 };
 
 // createLogger creates a new logger.
@@ -25,8 +33,8 @@ export const createLogger = (environment: Environment, service: string, level: s
         format: winston.format.json(),
         defaultMeta: {service, environment},
         transports: [
-            new winston.transports.File({filename: "logs/error.log", level}),
-            new winston.transports.File({filename: "logs/combined.log"}),
+            new winston.transports.File({filename: "hn/logs/error.log", level}),
+            new winston.transports.File({filename: "hn/logs/combined.log"}),
         ],
     });
 
@@ -38,7 +46,3 @@ export const createLogger = (environment: Environment, service: string, level: s
 
     return fromJS(l);
 };
-
-// const createLoggerByEnv = R.partial(createLogger, [Environment.PRODUCTION, "test"]);
-//
-// either.map(getLogLevel(Environment.PRODUCTION), createLoggerByEnv);

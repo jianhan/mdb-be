@@ -19,3 +19,5 @@ export enum Environment {
 }
 
 export const enumValues = <T>(enums: any): T[] => R.keys(enums).map(k => enums[k]).map(v => v as T);
+
+export const HomepageUrl = "https://hackernoon.com";

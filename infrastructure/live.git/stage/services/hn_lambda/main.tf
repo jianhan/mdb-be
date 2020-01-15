@@ -27,9 +27,18 @@ provider "aws" {
 # DEPLOY THE LAMBDA FUNCTION
 # ------------------------------------------------------------------------------
 module "hn_lambda" {
-  source = "../../../../modules.git/services/hn_lambda"
+  source = "github.com/jianhan/mdb-infrastructure-modules//services/lambda?ref=v1.0.2-rc.4"
   filename = "lambda.zip"
   env_prefix = "stage"
   handler = "handler.handler"
   runtime = "nodejs12.x"
+  function_name = "hn_lambda"
+}
+
+# ------------------------------------------------------------------------------
+# DEPLOY S3
+# ------------------------------------------------------------------------------
+module "hn_s3" {
+  source = "github.com/jianhan/mdb-infrastructure-modules//services/s3?ref=v1.0.2-rc.4"
+  bucket_prefix = "hn-lambda"
 }

@@ -1,0 +1,44 @@
+{
+  "expectedTags": [
+    {
+      "_name": "test-1",
+      "_href": "/tagged/test-1",
+      "_count": 11
+    },
+    {
+      "_name": "test-2",
+      "_href": "/tagged/test-2",
+      "_count": 12
+    },
+    {
+      "_name": "test-3",
+      "_href": "/tagged/test-3",
+      "_count": 13
+    },
+    {
+      "_name": "test-4",
+      "_href": "/tagged/test-4",
+      "_count": 14
+    },
+    {
+      "_name": "test-5",
+      "_href": "/tagged/test-5",
+      "_count": 15
+    },
+    {
+      "_name": "test-6",
+      "_href": "/tagged/test-6",
+      "_count": 16
+    },
+    {
+      "_name": "test-invalid-count",
+      "_href": "/tagged/test-invalid-count",
+      "_count": 0
+    },
+    {
+      "_name": "test-nospan",
+      "_href": "/tagged/test-nospan",
+      "_count": 0
+    }
+  ]
+}

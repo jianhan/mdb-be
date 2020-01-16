@@ -1,8 +1,10 @@
 import cheerio from "cheerio";
 import {validateSync} from "class-validator";
+import produce from "immer";
 import _ = require("lodash");
 import R from "ramda";
 import {Logger} from "winston";
+import {selectBy} from "../scraper";
 import Tag from "./Tag";
 
 /**
@@ -13,33 +15,40 @@ import Tag from "./Tag";
  */
 export const extractTags = (html: string, logger: Logger): Tag[] => {
     logger.info("start process tagsExtractor");
-    const composer  = R.compose(
+    const composer = R.compose(
         R.uniqBy(R.prop("href")),
         // @ts-ignore
         R.sortBy(R.prop("name")),
         R.filter(valid),
-        R.map(extract),
+        R.map(elementToTag),
         R.curry(selectBy)("div#hits ul.tags-list > li > header"),
     );
 
     return composer(html);
 };
 
-const selectBy = (selector: string, html: string): CheerioElement[] => cheerio.load(html)(selector).toArray();
-
+/**
+ * valid checks if a tag is valid.
+ * @param tag
+ */
 const valid = (tag: Tag): boolean => validateSync(tag).length === 0;
 
-const extract = (e: CheerioElement): Tag => {
+const elementToTag = (e: CheerioElement): Tag => {
     const selector = cheerio.load(e);
     return R.compose(
-        R.curry(count)(selector),
-        R.curry(link)(selector),
+        R.curry(getCount)(selector),
+        R.curry(getLink)(selector),
     )(new Tag());
 };
 
-const link = (selector: CheerioStatic, tag: Tag): Tag => {
+/**
+ * getLink retrieve href and string for tag.
+ * @param selector
+ * @param tag
+ */
+const getLink = (selector: CheerioStatic, tag: Tag): Tag => {
 
-    // find link and extract content from link to tag name
+    // find getLink and elementToTag content from getLink to tag name
     const aTags = selector("h2 > a").toArray();
     if (aTags.length === 0) {
         return tag;
@@ -52,20 +61,26 @@ const link = (selector: CheerioStatic, tag: Tag): Tag => {
     }
 
     // all good
-    tag.name =  _.trim(cheerio(aTags[0]).html() as string, "#");
-    tag.href = aTags[0].attribs.href;
-
-    return tag;
+    return produce(tag, newState => {
+        newState.name = _.trim(cheerio(aTags[0]).html() as string, "#");
+        newState.href = aTags[0].attribs.href;
+    });
 };
 
-const count = (selector: CheerioStatic, tag: Tag): Tag => {
+/**
+ * getCount retrieves count for tag.
+ * @param selector
+ * @param tag
+ */
+const getCount = (selector: CheerioStatic, tag: Tag): Tag => {
 
-    // find span and extract count from span
-    const spanTags = selector("span.count").toArray();
+    // find span and elementToTag getCount from span
+    const spanTags = selector("span.getCount").toArray();
     if (spanTags.length === 0) {
         return tag;
     }
-    tag.count = +(cheerio(spanTags[0]).html() as string).replace(/[^0-9.]/g, "");
 
-    return tag;
+    return produce(tag, newState => {
+        newState.count = +(cheerio(spanTags[0]).html() as string).replace(/[^0-9.]/g, "");
+    });
 };

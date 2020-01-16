@@ -8,7 +8,7 @@ import {Logger} from "winston";
 import {Environment, LogLevel} from "../constants";
 import {getEnvs} from "../envs";
 import {createLogger} from "../logger";
-import {extractTags} from "./extractTags";
+import {extract} from "./extract";
 
 interface ITagsObj {
     expectedTags: string[];
@@ -40,7 +40,7 @@ describe("extract function", () => {
     it("should fetch all tags", () => {
         const htmlPath = pathPrefixFunc("tags.html");
         const tagsPath = pathPrefixFunc("tags.json");
-        const actualTags = extractTags(readFileByPath("utf8")(htmlPath), logger);
+        const actualTags = extract(readFileByPath("utf8")(htmlPath), logger);
         const expectedTags = genTagsArr(tagsPath);
 
         // assertion
@@ -51,7 +51,7 @@ describe("extract function", () => {
         jsc.assert(jsc.forall(
             jsc.array(jsc.string),
             (arr: string[]): boolean => {
-                return extractTags(_.join(arr, " "), logger).length === 0;
+                return extract(_.join(arr, " "), logger).length === 0;
             },
         ));
     });

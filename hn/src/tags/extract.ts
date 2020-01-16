@@ -13,7 +13,7 @@ import Tag from "./Tag";
  * @param html
  * @param logger
  */
-export const extractTags = (html: string, logger: Logger): Tag[] => {
+export const extract = (html: string, logger: Logger): Tag[] => {
     logger.info("start process tagsExtractor");
     const composer = R.compose(
         R.uniqBy(R.prop("href")),
@@ -75,7 +75,7 @@ const getLink = (selector: CheerioStatic, tag: Tag): Tag => {
 const getCount = (selector: CheerioStatic, tag: Tag): Tag => {
 
     // find span and elementToTag getCount from span
-    const spanTags = selector("span.getCount").toArray();
+    const spanTags = selector("span.count").toArray();
     if (spanTags.length === 0) {
         return tag;
     }

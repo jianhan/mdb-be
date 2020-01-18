@@ -1,5 +1,5 @@
 {
-  "name": "hn",
+  "name": "tw",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,9 +12,6 @@
     "build": "tsc",
     "build:zip": "npm run clean && npm run build && cd dist && cp ../package.json . && npm i --production && rm *.json && zip -r lambda.zip ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@fluffy-spoon/substitute": "^1.107.0",
     "@reactivex/rxjs": "^6.5.4",
@@ -24,13 +21,11 @@
     "@types/immutable": "^3.8.7",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
-    "@types/moment": "^2.13.0",
     "@types/node": "^13.1.2",
     "@types/puppeteer": "^2.0.0",
     "@types/ramda": "^0.26.39",
     "@types/request": "^2.48.4",
     "@types/request-promise-native": "^1.0.17",
-    "@types/sprintf-js": "^1.1.2",
     "@types/typescript": "^2.0.0",
     "jest": "^24.9.0",
     "jsverify": "^0.8.4",
@@ -51,7 +46,6 @@
     "immer": "^5.1.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
     "puppeteer": "^2.0.0",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.10.1",
@@ -60,7 +54,9 @@
     "request-promise": "^4.2.5",
     "request-promise-native": "^1.0.8",
     "rxjs": "^6.5.4",
-    "sprintf-js": "^1.1.2",
     "winston": "^3.2.1"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

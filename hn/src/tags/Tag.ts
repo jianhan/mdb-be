@@ -1,5 +1,8 @@
 import {IsNotEmpty, IsNumber, IsString} from "class-validator";
 
+/**
+ * Tag is a data structure represent a tag with name count and href..
+ */
 export default class Tag {
 
     @IsNotEmpty()

@@ -26,6 +26,7 @@
     "@types/ramda": "^0.26.39",
     "@types/request": "^2.48.4",
     "@types/request-promise-native": "^1.0.17",
+    "@types/twitter": "^1.7.0",
     "@types/typescript": "^2.0.0",
     "jest": "^24.9.0",
     "jsverify": "^0.8.4",
@@ -54,6 +55,7 @@
     "request-promise": "^4.2.5",
     "request-promise-native": "^1.0.8",
     "rxjs": "^6.5.4",
+    "twitter": "^1.7.1",
     "winston": "^3.2.1"
   },
   "keywords": [],

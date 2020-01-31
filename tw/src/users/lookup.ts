@@ -2,19 +2,17 @@ import {S3} from "aws-sdk";
 import {PutObjectRequest} from "aws-sdk/clients/s3";
 import {validateSync} from "class-validator";
 import {Map} from "immutable";
+import moment from "moment";
 import R from "ramda";
 import {from, Observable} from "rxjs";
-import Twitter = require("twitter");
-import {ResponseData} from "twitter";
+import {flatMap} from "rxjs/operators";
+import Twitter, {ResponseData} from "twitter";
 import {Logger} from "winston";
 import {hasPropertyAndNotEmpty, notEmpty, prefixDateTime} from "../logics";
-import UsersLookupParameters from "./UsersLookupParameters";
-import {flatMap} from "rxjs/operators";
-import moment from "moment";
 import {getClient} from "../tw";
+import UsersLookupParameters from "./UsersLookupParameters";
 
-export const bool2Str = (k: string) => {
-
+const bool2Str = (k: string) => {
     return R.compose(
         R.ifElse(
             R.is(Boolean),
@@ -26,7 +24,7 @@ export const bool2Str = (k: string) => {
     );
 };
 
-export const sensitizeArrAndJoin = (glue: string, k: string) => {
+const sensitizeArrAndJoin = (glue: string, k: string) => {
     return R.ifElse(
         R.curry(hasPropertyAndNotEmpty)(k),
         R.compose(
@@ -34,18 +32,13 @@ export const sensitizeArrAndJoin = (glue: string, k: string) => {
             // @ts-ignore
             R.filter(notEmpty),
             R.uniq,
-            R.map(
-                R.ifElse(
-                    R.is(String),
-                    R.trim,
-                    R.identity,
-                )),
+            R.map(R.ifElse(R.is(String), R.trim, R.identity)),
             R.prop(k)),
         () => "",
     );
 };
 
-export const validateAndLog = (logger: Logger, params: UsersLookupParameters): boolean => {
+const validateAndLog = (logger: Logger, params: UsersLookupParameters): boolean => {
     const err = validateSync(params);
     if (R.length(err) > 0) {
         logger.error(err);
@@ -54,7 +47,7 @@ export const validateAndLog = (logger: Logger, params: UsersLookupParameters): b
     return true;
 };
 
-export const parseParams = (lookupParams: UsersLookupParameters): { [key: string]: any } => {
+const parseParams = (lookupParams: UsersLookupParameters): { [key: string]: any } => {
     return {
         user_id: sensitizeArrAndJoin(",", "_userIds")(lookupParams),
         screen_name: sensitizeArrAndJoin(",", "_screenNames")(lookupParams),

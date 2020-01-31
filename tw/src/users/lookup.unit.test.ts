@@ -1,49 +1,49 @@
-import R from "ramda";
-import {constructParams, getAPIParams} from "./lookup";
+import {bool2Str, parseParams, sensitizeArrAndJoin} from "./lookup";
 import UsersLookupParameters from "./UsersLookupParameters";
 
-let params: UsersLookupParameters;
+let lookupParams: UsersLookupParameters;
 
 beforeEach(() => {
-    params = new UsersLookupParameters(["test   ", "test1    ", "test", "test1"], [1, 2, 3, 1, 1, 2, 2], true, true);
+    lookupParams = new UsersLookupParameters(["test   ", "test1    ", "test", "test1", "", "test2"], [99, 100, 1, 2, 3, 1, 1, 2, 2], true, false);
 });
 
-describe("function convertScreenNames", () => {
+describe("function sensitizeArrAndJoin", () => {
 
-    it("should convert all properties", () => {
-        // @ts-ignore
-        const apiParams = constructParams(params)({});
-        expect(apiParams).toEqual({
-            tweet_mode: true,
-            include_entities: true,
-            user_id: "1,2,3",
-            screen_name: "test,test1",
+    it("should trim elements and remove duplicates for screen names", () => {
+        const screenNames = sensitizeArrAndJoin(",", "_screenNames")(lookupParams);
+        expect(screenNames).toEqual("test,test1,test2");
+    });
+
+    it("should trim elements and remove duplicates for user ids", () => {
+        const screenNames = sensitizeArrAndJoin(",", "_userIds")(lookupParams);
+        expect(screenNames).toEqual("99,100,1,2,3");
+    });
+
+});
+
+describe("function bool2Str", () => {
+
+    it("should convert bool to string", () => {
+        const includeEntities = bool2Str("_includeEntities")(lookupParams);
+        expect(includeEntities).toEqual("true");
+
+        const tweetMode = bool2Str("_tweetMode")(lookupParams);
+        expect(tweetMode).toEqual("false");
+
+    });
+
+});
+
+describe("function paramsObjToAPIParams", () => {
+
+    it("it should convert to object", () => {
+        const result = parseParams(lookupParams);
+        expect(result).toEqual({
+            user_id: "99,100,1,2,3",
+            screen_name: "test,test1,test2",
+            include_entities: "true",
+            tweet_mode: "false",
         });
-    });
-
-});
-
-describe("function getAPIParams", () => {
-
-    it("should return valid api params with valid input", () => {
-        const result = getAPIParams(params);
-        expect(result._tag).toBe("Right");
-    });
-
-    it("should fail when screenNames exceed max size", () => {
-        params.screenNames = R.range(1, 102).map(x => "test name " + x);
-        expect(getAPIParams(params)._tag).toBe("Left");
-
-        params.screenNames = R.range(1, 101).map(x => "test name " + x);
-        expect(getAPIParams(params)._tag).toBe("Right");
-    });
-
-    it("should fail when userIds exceed max size", () => {
-        params.userIds = R.range(1, 102);
-        expect(getAPIParams(params)._tag).toBe("Left");
-
-        params.userIds = R.range(1, 101);
-        expect(getAPIParams(params)._tag).toBe("Right");
     });
 
 });

@@ -16,7 +16,7 @@ beforeEach(async () => {
 });
 
 describe("users",   () => {
-    it("should lookup multiply users", done => {
+    it("should lookup multiply users and upload", done => {
         const client = getClient(envs);
         client.get("users/lookup", {screen_name: "realDonaldTrump"}, (error, tweets, response) => {
             console.log(tweets);

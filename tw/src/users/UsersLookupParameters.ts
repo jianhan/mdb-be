@@ -1,4 +1,4 @@
-import {ArrayMaxSize, IsArray, IsBoolean, IsNumber, IsString} from "class-validator";
+import {ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsNumber, IsString} from "class-validator";
 
 export default class UsersLookupParameters {
 
@@ -36,6 +36,7 @@ export default class UsersLookupParameters {
 
     @IsArray()
     @ArrayMaxSize(100)
+    @ArrayMinSize(1)
     @IsString({each: true})
     private _screenNames: string[];
 

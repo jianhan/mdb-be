@@ -1,4 +1,5 @@
 import {Map} from "immutable";
+import {from} from "rxjs";
 import Twitter = require("twitter");
 
 export const getClient = (envs: Map<string, string | undefined>) => {
@@ -10,4 +11,7 @@ export const getClient = (envs: Map<string, string | undefined>) => {
     });
 };
 
+export const usersLookupAndUpload = (tw: Twitter, params: object) => {
+    return from(tw.get("users/lookup", params));
+};
 

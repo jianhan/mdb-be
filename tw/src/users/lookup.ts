@@ -1,15 +1,12 @@
 import {S3} from "aws-sdk";
 import {PutObjectRequest} from "aws-sdk/clients/s3";
 import {validateSync} from "class-validator";
-import {Map} from "immutable";
-import moment from "moment";
 import R from "ramda";
 import {from, Observable} from "rxjs";
 import {flatMap} from "rxjs/operators";
 import Twitter, {ResponseData} from "twitter";
 import {Logger} from "winston";
-import {hasPropertyAndNotEmpty, notEmpty, prefixDateTime} from "../logics";
-import {getClient} from "../tw";
+import {hasPropertyAndNotEmpty, notEmpty} from "../logics";
 import UsersLookupParameters from "./UsersLookupParameters";
 
 const bool2Str = (k: string) => {
@@ -56,28 +53,22 @@ const parseParams = (lookupParams: UsersLookupParameters): { [key: string]: any 
     };
 };
 
-export const usersLookupObserver = (tw: Twitter, params: object): Observable<ResponseData> => from(tw.get("users/lookup", params));
+const usersLookupObserver = (tw: Twitter, params: object): Observable<ResponseData> => from(tw.get("users/lookup", params));
 
-export const uploadToS3Observer = (key: string, envs: Map<string, string | undefined>, s3: S3, response: ResponseData) => {
+const uploadToS3Observer = (bucketName: string, key: string, s3: S3, response: ResponseData) => {
     const params: PutObjectRequest = {
-        Bucket: envs.get("S3_BUCKET_NAME") as string,
+        Bucket: bucketName,
         Key: key,
         Body: JSON.stringify(response),
     };
     return from(s3.upload(params).promise());
 };
 
-export const lookupAndUpload = (envs: Map<string, string | undefined>, params: UsersLookupParameters, logger: Logger) => {
-    const s3 = new S3({
-        accessKeyId: envs.get("S3_ACCESS_KEY_ID"),
-        secretAccessKey: envs.get("S3_SECRET_ACCESS_KEY"),
-    });
-    const tw = getClient(envs);
-
+export const lookupAndUpload = (bucketName: string, key: string, s3: S3, tw: Twitter, params: UsersLookupParameters, logger: Logger) => {
     return R.compose(
         R.curry(usersLookupObserver)(tw),
         R.when(R.curry(validateAndLog)(logger), parseParams),
     )(params).pipe(
-        flatMap(p => uploadToS3Observer(prefixDateTime("YYYY-MM-DD-HH:mm")("users.json", moment()), envs, s3, p)),
+        flatMap(p => uploadToS3Observer(bucketName, key, s3, p)),
     );
 };

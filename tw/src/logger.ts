@@ -26,7 +26,7 @@ export const getLogLevel = (environment: Environment): Either<Error, LogLevel> =
 };
 
 // createLogger creates a new logger.
-export const createLogger = (environment: Environment, service: string, level: string): Logger => {
+export const createLogger = (environment: string, service: string, level: string): winston.Logger => {
     const l = winston.createLogger({
         level,
         silent: false,

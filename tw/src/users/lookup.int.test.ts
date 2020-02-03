@@ -40,10 +40,10 @@ describe("lookupAndUpload function should retrieve users information and upload 
             access_token_secret: envs.get("ACCESS_SECRET") as string,
         });
 
-        const lau = lookupAndUpload(envs.get("S3_BUCKET_NAME") as string, key, s3, tw)(params);
+        const lau = lookupAndUpload({Bucket: envs.get("S3_BUCKET_NAME") as string, Key: key}, s3, tw)(params);
+
         // @ts-ignore
         expect(S.isLeft(lau)).toBe(false);
-
 
         S.either((v: ValidationError[]) => {
             logger.info(v);

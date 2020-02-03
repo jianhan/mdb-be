@@ -1,11 +1,24 @@
+import S3 = require("aws-sdk/clients/s3");
 import _ from "lodash";
 import {range} from "ramda";
 import rewire from "rewire";
 import S from "sanctuary";
+import Twitter = require("twitter");
 import {lookupAndUpload} from "./lookup";
 import UsersLookupParameters from "./UsersLookupParameters";
 
 describe("pure functions", () => {
+
+    let s3: S3;
+    let tw: Twitter;
+
+    beforeEach(() => {
+        // @ts-ignore
+        s3 = jest.genMockFromModule("aws-sdk").S3;
+        // @ts-ignore
+        tw = jest.genMockFromModule("twitter").Twitter;
+    });
+
     const lookupModule = rewire("../../dist/users/lookup.js");
 
     it("bool2Str should convert boolean to string", () => {
@@ -29,25 +42,23 @@ describe("pure functions", () => {
         });
     });
 
-    it("validateAndLog should fail when empty _screenNames is provided", () => {
-        // @ts-ignore
-        const s3 = jest.genMockFromModule("aws-sdk").S3;
-        // @ts-ignore
-        const tw = jest.genMockFromModule("twitter").Twitter;
-        const lau = lookupAndUpload("test", "test", s3, tw);
+    it("validate should fail when empty _screenNames is provided", () => {
+        const lau = lookupAndUpload({Bucket: "test", Key: "test"}, s3, tw);
         // @ts-ignore
         expect(S.isLeft(lau(new UsersLookupParameters()))).toBe(true);
     });
 
-    it("validateAndLog should fail when _screenNames is exceeded", () => {
-        // @ts-ignore
-        const s3 = jest.genMockFromModule("aws-sdk").S3;
-        // @ts-ignore
-        const tw = jest.genMockFromModule("twitter").Twitter;
-        const lau = lookupAndUpload("test", "test", s3, tw);
+    it("validate should fail when _screenNames is exceeded", () => {
+        const lau = lookupAndUpload({Bucket: "test", Key: "test"}, s3, tw);
         const screenNames = range(1, 101).map((n: number) => "name " + n);
         // @ts-ignore
         expect(S.isLeft(lau(new UsersLookupParameters({_screenNames: screenNames})))).toBe(true);
+    });
+
+    it("validate should fail when _userIds is exceeded", () => {
+        const lau = lookupAndUpload({Bucket: "test", Key: "test"}, s3, tw);
+        // @ts-ignore
+        expect(S.isLeft(lau(new UsersLookupParameters({_userIds: range(1, 101)})))).toBe(true);
     });
 
 });

@@ -55,24 +55,17 @@ const validate = (params: UsersLookupParameters) => {
     return S.Right(params);
 };
 
-const uploadToS3Observer = (bucketName: string, key: string, s3: S3, response: ResponseData) => {
-    const params: PutObjectRequest = {
-        Bucket: bucketName,
-        Key: key,
-        Body: JSON.stringify(response),
-    };
-    return from(s3.upload(params).promise());
+const upload = (putObjectRequest: PutObjectRequest, s3: S3, o: Observable<ResponseData>) => {
+    return o.pipe(
+        flatMap(p => from(s3.upload(Object.assign({}, putObjectRequest, {Body: JSON.stringify(p)})).promise())),
+    );
 };
 
-const upload = (bucketName: string, key: string, s3: S3, o: Observable<ResponseData>) => {
-    return o.pipe(flatMap(p => uploadToS3Observer(bucketName, key, s3, p)));
-};
-
-export const lookupAndUpload = (bucketName: string, key: string, s3: S3, tw: Twitter) => {
+export const lookupAndUpload = (putObjectRequest: PutObjectRequest, s3: S3, tw: Twitter) => {
     return S.pipe([
         validate,
         S.map(parse),
         S.map(S.curry2(lookup)(tw)),
-        S.map(S.curry4(upload)(bucketName)(key)(s3)),
+        S.map(S.curry3(upload)(putObjectRequest)(s3)),
     ]);
 };

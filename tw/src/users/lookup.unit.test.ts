@@ -1,23 +1,26 @@
 import S3 = require("aws-sdk/clients/s3");
+import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
 import _ from "lodash";
 import {range} from "ramda";
 import rewire from "rewire";
+import {Observable} from "rxjs";
 import S from "sanctuary";
 import Twitter = require("twitter");
 import {lookupAndUpload} from "./lookup";
 import UsersLookupParameters from "./UsersLookupParameters";
+import SendData = ManagedUpload.SendData;
+
+let s3: S3;
+let tw: Twitter;
+
+beforeEach(() => {
+    // @ts-ignore
+    s3 = new S3();
+    // @ts-ignore
+    tw = new Twitter();
+});
 
 describe("pure functions", () => {
-
-    let s3: S3;
-    let tw: Twitter;
-
-    beforeEach(() => {
-        // @ts-ignore
-        s3 = jest.genMockFromModule("aws-sdk").S3;
-        // @ts-ignore
-        tw = jest.genMockFromModule("twitter").Twitter;
-    });
 
     const lookupModule = rewire("../../dist/users/lookup.js");
 
@@ -61,4 +64,28 @@ describe("pure functions", () => {
         expect(S.isLeft(lau(new UsersLookupParameters({_userIds: range(1, 101)})))).toBe(true);
     });
 
+});
+
+describe("lookupAndUpload function", () => {
+
+    it("should handle error correctly when lookup rejects", done => {
+        const errMsg = "error occur";
+        const params = new UsersLookupParameters(["chenqiushi404"]);
+        const spy = jest.spyOn(tw, "get").mockRejectedValue(errMsg);
+        const lau = lookupAndUpload({Bucket: "test", Key: "test"}, s3, tw)(params);
+
+        // @ts-ignore
+        expect(S.isRight(lau)).toBe(true);
+        expect(spy).toBeCalled();
+        S.either(() => done())((o: Observable<SendData>) => {
+            o.subscribe(
+                () => done(),
+                err => {
+                    expect(err).toEqual(errMsg);
+                    done();
+                },
+            );
+            // @ts-ignore
+        })(lau);
+    });
 });

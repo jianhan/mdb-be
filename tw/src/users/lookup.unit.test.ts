@@ -1,4 +1,5 @@
 import S3 = require("aws-sdk/clients/s3");
+import SendData = ManagedUpload.SendData;
 import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
 import _ from "lodash";
 import {range} from "ramda";
@@ -8,13 +9,11 @@ import S from "sanctuary";
 import Twitter = require("twitter");
 import {lookupAndUpload} from "./lookup";
 import UsersLookupParameters from "./UsersLookupParameters";
-import SendData = ManagedUpload.SendData;
 
 let s3: S3;
 let tw: Twitter;
 
 beforeEach(() => {
-    // @ts-ignore
     s3 = new S3();
     // @ts-ignore
     tw = new Twitter();
@@ -68,7 +67,7 @@ describe("pure functions", () => {
 
 describe("lookupAndUpload function", () => {
 
-    it("should handle error correctly when lookup rejects", done => {
+    it("should catch error correctly when lookup rejects", done => {
         const errMsg = "error occur";
         const params = new UsersLookupParameters(["chenqiushi404"]);
         const spy = jest.spyOn(tw, "get").mockRejectedValue(errMsg);
@@ -88,4 +87,32 @@ describe("lookupAndUpload function", () => {
             // @ts-ignore
         })(lau);
     });
+
+    it("should catch error correctly when upload rejects", done => {
+        const errMsg = "error occur!";
+        const params = new UsersLookupParameters(["chenqiushi404"]);
+        jest.spyOn(tw, "get").mockResolvedValue(Promise.resolve({test: "test"}));
+        const mockedUpload = () => {
+            return {promise: () => Promise.reject(errMsg)};
+        };
+        // @ts-ignore
+        jest.spyOn(s3, "upload").mockImplementation(mockedUpload);
+
+        const lau = lookupAndUpload({Bucket: "test", Key: "test"}, s3, tw)(params);
+
+        // @ts-ignore
+        expect(S.isRight(lau)).toBe(true);
+
+        S.either(() => done())((o: Observable<SendData>) => {
+            o.subscribe(
+                () => done(),
+                err => {
+                    expect(err).toEqual(errMsg);
+                    done();
+                },
+            );
+            // @ts-ignore
+        })(lau);
+    });
+
 });

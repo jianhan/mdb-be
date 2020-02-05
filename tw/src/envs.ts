@@ -1,7 +1,7 @@
-import {IsIn, IsNotEmpty, IsString, validate} from "class-validator";
-import {Map} from "immutable";
-import ProcessEnv = NodeJS.ProcessEnv;
-import {enumValues, Environment} from "./constants";
+import {IsIn, IsNotEmpty, IsString} from "class-validator";
+
+// @ts-ignore
+import {enumValues, Environment} from "../../lib/src/constants";
 
 /**
  * Environment variables.
@@ -44,16 +44,3 @@ export class Envs {
     public S3_BUCKET_NAME?: string;
 
 }
-
-// getEnvs retrieves environment variables.
-export const getEnvs = async (envs: ProcessEnv): Promise<Map<string, string | Environment | undefined>> => {
-    const envsObj = Object.assign(new Envs(), envs);
-    return new Promise<Map<string, string|undefined>>((resolve, reject) => {
-        return validate(envsObj).then(errors => {
-            if (errors.length > 0) {
-                reject(errors);
-            }
-            resolve(Map(envsObj));
-        });
-    });
-};

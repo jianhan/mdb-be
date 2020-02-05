@@ -1,16 +1,10 @@
 {
-  "name": "tw",
+  "name": "lib",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest -c jest.config.js",
-    "test:unit": "jest -c jest.config.unit.js",
-    "test:integration": "tsc & jest -c jest.config.integration.js",
-    "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
-    "clean": "rm -rf dist",
-    "build": "tsc",
-    "build:zip": "npm run clean && npm run build && cd dist && cp ../package.json . && npm i --production && rm *.json && zip -r lambda.zip ."
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@fluffy-spoon/substitute": "^1.107.0",
@@ -23,6 +17,7 @@
     "@types/lodash": "^4.14.149",
     "@types/moment": "^2.13.0",
     "@types/node": "^13.1.2",
+    "@types/puppeteer": "^2.0.0",
     "@types/ramda": "^0.26.39",
     "@types/request": "^2.48.4",
     "@types/request-promise-native": "^1.0.17",
@@ -52,6 +47,7 @@
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "puppeteer": "^2.0.0",
     "ramda": "^0.26.1",
     "ramda-extension": "^0.10.1",
     "ramda-fantasy": "^0.8.0",

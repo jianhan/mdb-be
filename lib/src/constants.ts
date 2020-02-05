@@ -1,5 +1,8 @@
 import R from "ramda";
 
+/**
+ * LogLevel defines different levels of logging.
+ */
 export enum LogLevel {
     ERROR = "error",
     WARN = "warn",
@@ -10,7 +13,7 @@ export enum LogLevel {
     SILLY = "silly",
 }
 
-// define type for different environments.
+// Environment defines types for different environments.
 export enum Environment {
     DEVELOPMENT = "development",
     STAGE = "stage",
@@ -18,4 +21,8 @@ export enum Environment {
     PRODUCTION = "production",
 }
 
+/**
+ * enumValues
+ * @param enums
+ */
 export const enumValues = <T>(enums: any): T[] => R.keys(enums).map(k => enums[k]).map(v => v as T);

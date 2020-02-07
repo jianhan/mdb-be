@@ -13,11 +13,11 @@ import {createLogger} from "../../../lib/src/logger";
 import SendData = ManagedUpload.SendData;
 // @ts-ignore
 import {prefixDateTime} from "../../../lib/src/logics";
+import {Envs} from "../envs";
 import {getTwClient} from "../tw";
 import {s3Client} from "../upload";
-import {lookupAndUpload} from "./lookup";
+import {lookupAndUpload} from "./lookupAndUpload";
 import UsersLookupParameters from "./UsersLookupParameters";
-import {Envs} from "../envs";
 
 let envs: Map<string, string | Environment | undefined>;
 let logger: Logger;

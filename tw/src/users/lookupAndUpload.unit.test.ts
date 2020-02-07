@@ -4,10 +4,11 @@ import {ManagedUpload} from "aws-sdk/lib/s3/managed_upload";
 import _ from "lodash";
 import {range} from "ramda";
 import rewire from "rewire";
-import {Observable} from "rxjs";
+import {Observable, of, from} from "rxjs";
 import S from "sanctuary";
+import R from "ramda";
 import Twitter = require("twitter");
-import {lookupAndUpload} from "./lookup";
+import {lookupAndUpload} from "./lookupAndUpload";
 import UsersLookupParameters from "./UsersLookupParameters";
 
 let s3: S3;

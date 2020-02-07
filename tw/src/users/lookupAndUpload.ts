@@ -1,21 +1,13 @@
-import {APIGatewayEvent} from "aws-lambda";
 import {S3} from "aws-sdk";
 import {PutObjectRequest} from "aws-sdk/clients/s3";
 import {validateSync} from "class-validator";
-import {Map} from "immutable";
-import moment from "moment";
 import R from "ramda";
 import {from, Observable} from "rxjs";
 import {flatMap} from "rxjs/operators";
 import S from "sanctuary";
 import Twitter, {ResponseData} from "twitter";
-import {Logger} from "winston";
-// @ts-ignore
-import {Environment} from "../../../lib/src/constants";
 // @ts-ignore
 import {hasPropertyAndNotEmpty, notEmpty, prefixDateTime} from "../../../lib/src/logics";
-import {getTwClient} from "../tw";
-import {s3Client} from "../upload";
 import UsersLookupParameters from "./UsersLookupParameters";
 
 /**
@@ -95,30 +87,4 @@ export const lookupAndUpload = (putObjectRequest: PutObjectRequest, s3: S3, tw: 
     return S.pipe([
         validate, S.map(parse), S.map(S.curry2(lookup)(tw)), S.map(S.curry3(upload)(putObjectRequest)(s3)),
     ]);
-};
-
-/**
- * getLookupAndUpload is a lambda function which will be invoked.
- * @param envs
- * @param logger
- * @param event
- */
-// tslint:disable-next-line:max-line-length
-export const getLookupAndUpload = (envs: Map<string, string | Environment | undefined>, logger: Logger, event: APIGatewayEvent): Observable<any> | undefined => {
-    const params = JSON.parse(event.body as string);
-    const s3 = s3Client({accessKeyId: envs.get("S3_ACCESS_KEY_ID"), secretAccessKey: envs.get("S3_SECRET_ACCESS_KEY")});
-    const tw = getTwClient({
-        consumer_key: envs.get("CONSUMER_API_KEY") as string,
-        consumer_secret: envs.get("CONSUMER_API_SECRET_KEY") as string,
-        access_token_key: envs.get("ACCESS_TOKEN") as string,
-        access_token_secret: envs.get("ACCESS_SECRET") as string,
-    });
-    const key = prefixDateTime("YYYY-MM-DD-HH:mm")("users.json", moment());
-    const result = lookupAndUpload({
-        Bucket: envs.get("S3_BUCKET_NAME") as string,
-        Key: key,
-    }, s3, tw)(new UsersLookupParameters(params));
-
-    // @ts-ignore
-    return S.either(logger.error, R.identity, result);
 };

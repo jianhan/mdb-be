@@ -97,6 +97,12 @@ export const lookupAndUpload = (putObjectRequest: PutObjectRequest, s3: S3, tw: 
     ]);
 };
 
+/**
+ * getLookupAndUpload is a lambda function which will be invoked.
+ * @param envs
+ * @param logger
+ * @param event
+ */
 // tslint:disable-next-line:max-line-length
 export const getLookupAndUpload = (envs: Map<string, string | Environment | undefined>, logger: Logger, event: APIGatewayEvent): Observable<any> | undefined => {
     const params = JSON.parse(event.body as string);

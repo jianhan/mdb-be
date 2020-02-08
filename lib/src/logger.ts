@@ -33,15 +33,13 @@ export const createLogger = (environment: string, service: string, level: string
         format: winston.format.json(),
         defaultMeta: {service, environment},
         transports: [
-            new winston.transports.File({filename: "logs/error.log", level}),
-            new winston.transports.File({filename: "logs/combined.log"}),
+            new winston.transports.Console({format: winston.format.simple()})
         ],
     });
 
     if (environment === Environment.DEVELOPMENT) {
-        l.add(new winston.transports.Console({
-            format: winston.format.simple(),
-        }));
+        l.add(new winston.transports.File({filename: "logs/error.log", level}));
+        l.add(new winston.transports.File({filename: "logs/combined.log"}));
     }
 
     return fromJS(l);

@@ -30,7 +30,7 @@ module "tw_lambda" {
   source = "github.com/jianhan/mdb-infrastructure-modules//services/lambda?ref=v1.0.2-rc.10"
   filename = "lambda.zip"
   env_prefix = "stage"
-  handler = "main.handler"
+  handler = "tw/src/main.handler"
   runtime = "nodejs12.x"
   function_name = "tw_lambda"
   environment_variables = var.environment_variables

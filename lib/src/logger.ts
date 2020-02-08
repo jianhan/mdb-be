@@ -38,7 +38,7 @@ export const createLogger = (environment: string, service: string, level: string
         ],
     });
 
-    if (environment !== Environment.PRODUCTION) {
+    if (environment === Environment.DEVELOPMENT) {
         l.add(new winston.transports.Console({
             format: winston.format.simple(),
         }));

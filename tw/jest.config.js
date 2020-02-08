@@ -14,6 +14,11 @@ module.exports = {
       }
     }
   },
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/dist/",
+    "/coverage/",
+  ],
   "clearMocks": true,
   "verbose": true,
   "roots": [
@@ -27,10 +32,11 @@ module.exports = {
   ],
   "collectCoverageFrom": [
     "**/*.{js,jsx,ts}",
+    "!**/*.test.{js,jsx,ts}",
     "!**/node_modules/**",
     "!**/vendor/**"
   ],
-  "coveragePathIgnorePatterns": ["/node_modules/"],
+  "coveragePathIgnorePatterns": ["/node_modules/", "dist"],
   "coverageDirectory": "coverage",
   "collectCoverage": true
 };

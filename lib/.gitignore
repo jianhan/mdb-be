@@ -9,4 +9,3 @@ node_modules
 logs
 coverage
 .env
-terraform.tfvars

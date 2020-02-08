@@ -21,7 +21,7 @@ beforeEach(() => {
 
 describe("pure functions", () => {
 
-    const lookupModule = rewire("../../dist/users/lookup.js");
+    const lookupModule = rewire("../../dist/tw/src/users/lookupAndUpload");
 
     it("bool2Str should convert boolean to string", () => {
         const bool2Str = lookupModule.__get__("bool2Str");

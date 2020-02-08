@@ -27,7 +27,7 @@ provider "aws" {
 # DEPLOY THE LAMBDA FUNCTION
 # ------------------------------------------------------------------------------
 module "tw_lambda" {
-  source = "github.com/jianhan/mdb-infrastructure-modules//services/lambda?ref=v1.0.2-rc.10"
+  source = "github.com/jianhan/mdb-infrastructure-modules//services/lambda?ref=v1.0.2-rc.11"
   filename = "lambda.zip"
   env_prefix = "stage"
   handler = "tw/src/main.handler"
@@ -40,6 +40,6 @@ module "tw_lambda" {
 # DEPLOY S3
 # ------------------------------------------------------------------------------
 module "tw_s3" {
-  source = "github.com/jianhan/mdb-infrastructure-modules//services/s3?ref=v1.0.2-rc.10"
+  source = "github.com/jianhan/mdb-infrastructure-modules//services/s3?ref=v1.0.2-rc.11"
   bucket_prefix = "tw-lambda"
 }

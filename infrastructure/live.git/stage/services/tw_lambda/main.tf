@@ -52,6 +52,16 @@ resource "aws_cloudwatch_event_target" "every_6_hours" {
   rule = aws_cloudwatch_event_rule.every_6_hours.name
   target_id = module.tw_lambda.lambda_function_target_id
   arn = module.tw_lambda.lambda_function_arn
+  input = <<DOC
+  {
+    "path": "./users/index",
+    "body": {
+      "screenNames": [
+        "chenqiushi404", "realDonaldTrump", "AlboMP", "KatieAllenMP", "karenandrewsmp", "kevinandrewsmp", "bridgetarcher", "AdamBandt", "SharonBirdMP", "BroadbentMP", "ScottBuchholzMP", "Tony_Burke"
+      ]
+    }
+  }
+  DOC
 }
 
 # ------------------------------------------------------------------------------

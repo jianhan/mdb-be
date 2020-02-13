@@ -3,16 +3,16 @@ module.exports = {
   "maxConcurrency": 7,
   "errorOnDeprecated": true,
   "displayName": {
-    name: 'DEFAULT',
-    color: 'red',
+    name: "DEFAULT",
+    color: "red",
   },
   "globals": {
     // "NODE_ENV": process.env.NODE_ENV,
-    'ts-jest': {
+    "ts-jest": {
       diagnostics: {
-        warnOnly: true
-      }
-    }
+        warnOnly: true,
+      },
+    },
   },
   "testPathIgnorePatterns": [
     "/node_modules/",
@@ -22,21 +22,21 @@ module.exports = {
   "clearMocks": true,
   "verbose": true,
   "roots": [
-    "<rootDir>/src"
+    "<rootDir>/src",
   ],
   "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
   "testMatch": [
-    "**/*.test.ts"
+    "**/*.test.ts",
   ],
   "collectCoverageFrom": [
     "**/*.{js,jsx,ts}",
     "!**/*.test.{js,jsx,ts}",
     "!**/node_modules/**",
-    "!**/vendor/**"
+    "!**/vendor/**",
   ],
   "coveragePathIgnorePatterns": ["/node_modules/", "dist"],
   "coverageDirectory": "coverage",
-  "collectCoverage": true
+  "collectCoverage": true,
 };

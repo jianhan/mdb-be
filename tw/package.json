@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.js",
-    "test:unit": "tsc & jest -c jest.config.unit.js",
-    "test:integration": "tsc & jest -c jest.config.integration.js",
+    "test:unit": "npm run clean && npm run build & jest -c jest.config.unit.js",
+    "test:integration": "npm run clean && npm run build & jest -c jest.config.integration.js",
     "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
     "clean": "rm -rf dist",
     "build": "tsc",

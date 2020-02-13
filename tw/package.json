@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.js",
-    "test:unit": "jest -c jest.config.unit.js",
+    "test:unit": "tsc & jest -c jest.config.unit.js",
     "test:integration": "tsc & jest -c jest.config.integration.js",
     "lint": "node_modules/tslint/bin/tslint -p tsconfig.json -c tslint.json 'src/**/*.{ts,tsx}'",
     "clean": "rm -rf dist",

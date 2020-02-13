@@ -1,13 +1,13 @@
-import {APIGatewayEvent} from "aws-lambda";
-import {constants} from "http2";
+import { APIGatewayEvent } from "aws-lambda";
+import { constants } from "http2";
 import _ from "lodash";
 // @ts-ignore
-import {Environment, LogLevel} from "../../lib/src/constants";
+import { Environment, LogLevel } from "../../lib/src/constants";
 // @ts-ignore
-import {getEnvs} from "../../lib/src/envs";
+import { getEnvs } from "../../lib/src/envs";
 // @ts-ignore
-import {createLogger} from "../../lib/src/logger";
-import {Envs} from "./envs";
+import { createLogger } from "../../lib/src/logger";
+import { Envs } from "./envs";
 
 export const handler = async (event: APIGatewayEvent): Promise<any> => {
     try {

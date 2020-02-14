@@ -32,9 +32,10 @@ jobs:
             lib-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-  build-tw:
+  build:
     name: Build TW
     runs-on: ubuntu-latest
+    needs: [build-lib]
     steps:
       - uses: actions/checkout@v2
       - name: Cache tw node modules

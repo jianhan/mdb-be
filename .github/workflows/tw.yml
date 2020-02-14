@@ -15,6 +15,13 @@ on:
         - created
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+        npm run lint
+      working-directory: ./tw
   unit_test:
     runs-on: ubuntu-latest
     strategy:
@@ -22,10 +29,6 @@ jobs:
         node-version: [10.x, 12.x]
     steps:
     - uses: actions/checkout@v2
-    - name: Lint
-    - run: |
-        npm run lint
-      working-directory: ./tw
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:

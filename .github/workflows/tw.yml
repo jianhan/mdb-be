@@ -72,11 +72,11 @@ jobs:
 
         # build tw
       - name: Install TW dependencies
-        uses: actions/cache@v1
+      - uses: actions/cache@v1
         with:
           path: ./tw/node_modules
           key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tw/package-lock.json') }}
-        run: npm run build
+      - run: npm run build
         working-directory: ./tw
       
   lint:

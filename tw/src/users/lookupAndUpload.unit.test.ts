@@ -79,6 +79,7 @@ describe("lookupAndUpload function", () => {
         // @ts-ignore
         expect(S.isRight(lau)).toBe(true);
 
+        // tslint:disable-next-line: no-identical-functions
         S.either(() => done())((o: Observable<SendData>) => {
             o.subscribe(
                 () => done(),

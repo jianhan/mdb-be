@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {handler} from "./main";
+import { handler } from "./main";
 
 jest.setTimeout(12000);
 
@@ -10,7 +10,7 @@ describe("main function", () => {
         const r = await handler({
             path: "./users/index",
             // @ts-ignore
-            body: {screenNames: ["chenqiushi404"]},
+            body: { screenNames: ["chenqiushi404"] },
         });
         expect(_.has(r, "statusCode")).toBe(true);
         expect(_.get(r, "statusCode")).toBe(200);
@@ -31,6 +31,7 @@ describe("main function", () => {
         expect(_.get(r, "statusCode")).toBe(400);
     });
 
+    // tslint:disable-next-line: no-identical-functions
     it("should not invoke lambdaFunc when path parameter is not valid", async () => {
         // @ts-ignore
         const r = await handler({

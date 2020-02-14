@@ -36,7 +36,6 @@ jobs:
       working-directory: ./tw
     - name: Archive artifacts
       uses: actions/upload-artifact@v1
-      working-directory: ./tw
       with:
         name: dist
         path: dist

@@ -18,9 +18,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-        npm run lint
+    - uses: actions/checkout@v2
+    - run: |
+      npm run lint
       working-directory: ./tw
   unit_test:
     runs-on: ubuntu-latest

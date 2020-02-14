@@ -15,23 +15,23 @@ on:
         - created
 
 jobs:
-  build-lib:
-    name: Install Lib dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache lib node modules
-        uses: actions/cache@v1
-        id: lib-node-modules-id
-        env:
-          cache-name: lib-node-modules
-        with:
-          path: ~/.npm
-          key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
-          restore-keys: |
-            lib-${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+  # build-lib:
+  #   name: Install Lib dependencies
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Cache lib node modules
+  #       uses: actions/cache@v1
+  #       id: lib-node-modules-id
+  #       env:
+  #         cache-name: lib-node-modules
+  #       with:
+  #         path: ~/.npm
+  #         key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
+  #         restore-keys: |
+  #           lib-${{ runner.os }}-build-${{ env.cache-name }}-
+  #           ${{ runner.os }}-build-
+  #           ${{ runner.os }}-
   build:
     name: Build TW
     runs-on: ubuntu-latest
@@ -50,18 +50,32 @@ jobs:
             tw-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
+      - uses: actions/cache@v1
+        id: lib-node-modules-id
+        env:
+          cache-name: lib-node-modules
+        with:
+          path: ~/.npm/tw
+          key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
+          restore-keys: |
+            lib-${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
       - name: Install lib dependencies
-      # install deps in lib
+        # install deps in lib
         if: steps.lib-node-modules-id.outputs.cache-hit != 'true'
         run: |
           npm install
         working-directory: ./lib
-      # install deps in tw
+
+        # install deps in tw
       - name: Install TW dependencies
         if: steps.tw-node-modules-id.outputs.cache-hit != 'true'
         run: npm install
         working-directory: ./tw
-      # build tw
+        # build tw
       - name: Build
         run: npm run build
         working-directory: ./tw

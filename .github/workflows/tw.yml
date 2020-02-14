@@ -16,6 +16,7 @@ on:
 
 jobs:
   build:
+    name: Build TW
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,13 +31,14 @@ jobs:
             tw-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies
+      - name: Install lib dependencies
       # install deps in lib
-      - run: |
+        run: |
           npm install
         working-directory: ./lib
+      - name: Install TW dependencies
       # install deps in tw
-      - run: npm install
+        run: npm install
         working-directory: ./tw
       # build tw
       - name: Build

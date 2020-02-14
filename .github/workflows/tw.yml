@@ -34,11 +34,10 @@ jobs:
         npm install
         npm run test:unit
       working-directory: ./tw
-    - name: Archive artifacts
       uses: actions/upload-artifact@v1
       with:
         name: dist
-        path: ./dist
+        path: dist
     # - name: Archive code coverage results
     #   uses: actions/upload-artifact@v1
     #   with:

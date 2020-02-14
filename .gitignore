@@ -10,3 +10,4 @@ logs
 coverage
 .env
 terraform.tfvars
+lint-result.*

@@ -32,8 +32,10 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: npm install
+        working-directory: ./tw
       - name: Build
         run: npm run build
+        working-directory: ./tw
   lint:
     runs-on: ubuntu-latest
     steps:

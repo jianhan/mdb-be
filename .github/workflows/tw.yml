@@ -31,8 +31,14 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
-        run: npm install
+      # install deps in lib
+      - run: |
+          npm install
+        working-directory: ./lib
+      # install deps in tw
+      - run: npm install
         working-directory: ./tw
+      # build tw
       - name: Build
         run: npm run build
         working-directory: ./tw

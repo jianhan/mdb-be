@@ -33,9 +33,10 @@ jobs:
     - run: |
         npm install
         npm run test:unit
+        ls -la
       working-directory: ./tw
-    - name: Archive artifacts
-    - run: ls -la
+    # - name: Archive artifacts
+    # - run: ls -la
       # uses: actions/upload-artifact@v1
       # with:
       #   name: dist

@@ -52,6 +52,7 @@ jobs:
             ${{ runner.os }}-
       - name: Install lib dependencies
       # install deps in lib
+        if: steps.lib-node-modules-id.outputs.cache-hit != 'true'
         run: |
           npm install
         working-directory: ./lib

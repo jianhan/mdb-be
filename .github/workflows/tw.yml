@@ -25,6 +25,7 @@ jobs:
     - name: Lint
     - run: |
         npm run lint
+      working-directory: ./tw
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:

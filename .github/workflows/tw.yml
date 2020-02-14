@@ -15,11 +15,31 @@ on:
         - created
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: tw-node-modules
+        with:
+          path: ~/.npm
+          key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tw/package-lock.json') }}
+          restore-keys: |
+            tw-${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
   lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - run: |
+        npm install
         npm run lint
       working-directory: ./tw
   unit_test:

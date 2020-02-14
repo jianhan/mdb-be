@@ -42,8 +42,8 @@ jobs:
       with:
         name: dist
         path: ./tw/dist
-    # - name: Archive code coverage results
-    #   uses: actions/upload-artifact@v1
-    #   with:
-    #     name: coverage
-    #     path: tw/coverage
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v1
+      with:
+        name: coverage
+        path: tw/coverage

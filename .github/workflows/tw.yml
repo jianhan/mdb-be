@@ -16,12 +16,29 @@ on:
 
 jobs:
   build:
+    name: Install Lib dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache lib node modules
+        uses: actions/cache@v1
+        id: lib-node-modules-id
+        env:
+          cache-name: lib-node-modules
+        with:
+          path: ~/.npm
+          key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
+          restore-keys: |
+            lib-${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
     name: Build TW
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache node modules
+      - name: Cache tw node modules
         uses: actions/cache@v1
+        id: tw-node-modules-id
         env:
           cache-name: tw-node-modules
         with:
@@ -36,8 +53,9 @@ jobs:
         run: |
           npm install
         working-directory: ./lib
-      - name: Install TW dependencies
       # install deps in tw
+      - name: Install TW dependencies
+        if: steps.tw-node-modules-id.outputs.cache-hit != 'true'
         run: npm install
         working-directory: ./tw
       # build tw

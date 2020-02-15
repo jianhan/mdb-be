@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: lib/node_modules
-          key: lib-${{ runner.os }}-build-${{ hashFiles('**/lib/package-lock.json') }}
+          key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
           restore-keys: |
             lib-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
@@ -43,7 +43,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: lib/node_modules
-          key: lib-${{ runner.os }}-build-${{ hashFiles('**/lib/package-lock.json') }}
+          key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
       - name: Install tw dependencies
         run: |
           npm install

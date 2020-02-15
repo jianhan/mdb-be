@@ -101,6 +101,13 @@ jobs:
       - name: Build
         run: echo 'Start to build' && npm run build
         working-directory: tw
+      
+      # Archive build dist artifacts
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: ./tw/dist
 
       # - uses: actions/cache@v1
       #   id: lib-node-modules-id

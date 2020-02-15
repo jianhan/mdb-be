@@ -71,16 +71,16 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install tw dependencies
-          if: steps.tw-node-modules-cache.outputs.cache-hit != 'true'
-          run: npm install
-          working-directory: tw
+        if: steps.tw-node-modules-cache.outputs.cache-hit != 'true'
+        run: npm install
+        working-directory: tw
       
       - name: Install lib dependencies
-          run: npm install
-          working-directory: lib
+        run: npm install
+        working-directory: lib
 
       - name: Build
-          run: npm run build
+        run: npm run build
 
       # - uses: actions/cache@v1
       #   id: lib-node-modules-id

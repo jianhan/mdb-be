@@ -115,7 +115,7 @@ jobs:
       
       # Unit test
       - name: Unit test
-      - run: npm run test:unit
+        run: npm run test:unit
         working-directory: ./tw     
       
       # Archive coverage

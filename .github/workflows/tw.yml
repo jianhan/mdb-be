@@ -29,8 +29,10 @@ jobs:
             lib-${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-        run: npm install
-        work-directory: ./lib
+      - name: Install dependencies
+        run: |
+          npm install
+        working-directory: ./lib
 
   tw-dependencies:
     name: Install Tw dependencies

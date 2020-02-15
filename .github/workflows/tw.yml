@@ -32,6 +32,7 @@ jobs:
 
   tw-dependencies:
     name: Install Tw dependencies
+    runs-on: ubuntu-latest
     needs: [lib-dependencies]
     steps:
       - name: Load lib cache dependencies

@@ -15,86 +15,100 @@ on:
         - created
 
 jobs:
-  lib-dependencies:
-    name: Install and cache lib dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache lib node modules
-        uses: actions/cache@v1
-        with:
-          path: lib/node_modules
-          key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
-          restore-keys: |
-            lib-${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install dependencies
-        run: |
-          npm install
-        working-directory: ./lib
 
-  tw-dependencies:
-    name: Install Tw dependencies
-    runs-on: ubuntu-latest
-    needs: [lib-dependencies]
-    steps:
-      - name: Load lib cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: lib/node_modules
-          key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
-      - name: Install tw dependencies
-        run: |
-          npm install
-        working-directory: ./tw
-          
-  # build:
-  #   name: Build TW
+
+  # lib-dependencies:
+  #   name: Install and cache lib dependencies
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v2
-
-  #     - name: Cache tw node modules
+  #     - name: Cache lib node modules
   #       uses: actions/cache@v1
-  #       id: tw-node-modules-id
-  #       env:
-  #         cache-name: tw-node-modules
   #       with:
-  #         path: ./tw/node_modules
-  #         key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tw/package-lock.json') }}
-  #         restore-keys: |
-  #           tw-${{ runner.os }}-build-${{ env.cache-name }}-
-  #           ${{ runner.os }}-build-
-  #           ${{ runner.os }}-
-
-  #     - uses: actions/cache@v1
-  #       id: lib-node-modules-id
-  #       env:
-  #         cache-name: lib-node-modules
-  #       with:
-  #         path: ~/.npm/tw
-  #         key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
+  #         path: lib/node_modules
+  #         key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
   #         restore-keys: |
   #           lib-${{ runner.os }}-build-${{ env.cache-name }}-
   #           ${{ runner.os }}-build-
   #           ${{ runner.os }}-
-
-  #     - name: Install lib dependencies
-  #       # install deps in lib
-  #       if: steps.lib-node-modules-id.outputs.cache-hit != 'true'
+  #     - name: Install dependencies
   #       run: |
   #         npm install
   #       working-directory: ./lib
 
-  #       # build tw
-  #     - name: Install TW dependencies
+  # tw-dependencies:
+  #   name: Install Tw dependencies
+  #   runs-on: ubuntu-latest
+  #   needs: [lib-dependencies]
+  #   steps:
+  #     - name: Load lib cache dependencies
   #       uses: actions/cache@v1
   #       with:
-  #         path: ./tw/node_modules
-  #         key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tw/package-lock.json') }}
-  #       run: npm run build
+  #         path: lib/node_modules
+  #         key: lib-${{ runner.os }}-build-${{ hashFiles('lib/package-lock.json') }}
+  #     - name: Install tw dependencies
+  #       run: |
+  #         npm install
   #       working-directory: ./tw
+          
+  build:
+    name: Build TW
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache tw node modules
+        uses: actions/cache@v1
+        id: tw-node-modules-cache
+        env:
+          cache-name: tw-node-modules
+        with:
+          path: tw/node_modules
+          key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('tw/package-lock.json') }}
+          restore-keys: |
+            tw-${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install tw dependencies
+          if: steps.tw-node-modules-cache.outputs.cache-hit != 'true'
+          run: npm install
+          working-directory: tw
+      
+      - name: Install lib dependencies
+          run: npm install
+          working-directory: lib
+
+      - name: Build
+          run: npm run build
+
+      # - uses: actions/cache@v1
+      #   id: lib-node-modules-id
+      #   env:
+      #     cache-name: lib-node-modules
+      #   with:
+      #     path: ~/.npm/tw
+      #     key: lib-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lib/package-lock.json') }}
+      #     restore-keys: |
+      #       lib-${{ runner.os }}-build-${{ env.cache-name }}-
+      #       ${{ runner.os }}-build-
+      #       ${{ runner.os }}-
+
+      # - name: Install lib dependencies
+      #   # install deps in lib
+      #   if: steps.lib-node-modules-id.outputs.cache-hit != 'true'
+      #   run: |
+      #     npm install
+      #   working-directory: ./lib
+
+      #   # build tw
+      # - name: Install TW dependencies
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ./tw/node_modules
+      #     key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/tw/package-lock.json') }}
+      #   run: npm run build
+      #   working-directory: ./tw
       
   # lint:
   #   runs-on: ubuntu-latest

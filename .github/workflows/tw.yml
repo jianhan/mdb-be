@@ -80,7 +80,7 @@ jobs:
         working-directory: lib
 
       - name: Build
-        run: npm run build
+        run: echo 'Start to build' && npm run build
         working-directory: tw
 
       # - uses: actions/cache@v1

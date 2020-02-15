@@ -57,21 +57,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Cache tw node modules
-      #   uses: actions/cache@v1
-      #   id: tw-node-modules-cache
-      #   env:
-      #     cache-name: tw-node-modules
-      #   with:
-      #     path: tw/node_modules
-      #     key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('tw/package-lock.json') }}
-      #     restore-keys: |
-      #       tw-${{ runner.os }}-build-${{ env.cache-name }}-
-      #       ${{ runner.os }}-build-
-      #       ${{ runner.os }}-
+      - name: Cache tw node modules
+        uses: actions/cache@v1
+        id: tw-node-modules-cache
+        env:
+          cache-name: tw-node-modules
+        with:
+          path: tw/node_modules
+          key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('tw/package-lock.json') }}
+          restore-keys: |
+            tw-${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install tw dependencies
-        # if: steps.tw-node-modules-cache.outputs.cache-hit != 'true'
+        if: steps.tw-node-modules-cache.outputs.cache-hit != 'true'
         run: npm install
         working-directory: tw
       

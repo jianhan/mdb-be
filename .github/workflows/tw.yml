@@ -81,6 +81,7 @@ jobs:
 
       - name: Build
         run: npm run build
+        working-directory: tw
 
       # - uses: actions/cache@v1
       #   id: lib-node-modules-id

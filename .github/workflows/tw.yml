@@ -61,7 +61,7 @@ jobs:
         uses: actions/cache@v1
         id: tw-node-modules-cache
         env:
-          cache-name: tw-node-modules
+          cache-name: tw-node-modules-cache
         with:
           path: tw/node_modules
           key: tw-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('tw/package-lock.json') }}

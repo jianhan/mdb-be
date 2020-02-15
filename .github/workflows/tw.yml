@@ -75,7 +75,7 @@ jobs:
       - name: Archive build artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: dist
+          name: tw_dist
           path: ./tw/dist
       
       # Unit test
@@ -87,5 +87,15 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v1
         with:
-          name: coverage
+          name: tw_coverage
           path: tw/coverage
+      
+      - name: Upload test coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./tw/coverage/clover.xml
+          flags: unittests
+          name: codecov-mdb-tw
+          # yml: ./codecov.yml 
+          fail_ci_if_error: true

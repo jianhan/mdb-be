@@ -51,8 +51,8 @@ jobs:
   #         npm install
   #       working-directory: ./tw
           
-  build:
-    name: Build TW
+  install-dependencies:
+    name: Install dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -78,10 +78,14 @@ jobs:
       - name: Install lib dependencies
         run: npm install
         working-directory: lib
-
+  
+  build:
+    name: Build 
+    steps:
       - name: Build
         run: echo 'Start to build' && npm run build
         working-directory: tw
+    
 
       # - uses: actions/cache@v1
       #   id: lib-node-modules-id

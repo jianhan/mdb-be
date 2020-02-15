@@ -52,7 +52,7 @@ jobs:
   #       working-directory: ./tw
           
   build-and-test:
-    name: Install dependencies
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -97,17 +97,33 @@ jobs:
         run: npm install
         working-directory: lib
       
+      # Lint
+      - name: Lint
+        run: npm run lint
+
       # Build tw
       - name: Build
-        run: echo 'Start to build' && npm run build
+        run: npm run build
         working-directory: tw
       
       # Archive build dist artifacts
-      - name: Archive artifacts
+      - name: Archive build artifacts
         uses: actions/upload-artifact@v1
         with:
           name: dist
           path: ./tw/dist
+      
+      # Unit test
+      - name: Unit test
+      - run: npm run test:unit
+        working-directory: ./tw     
+      
+      # Archive coverage
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage
+          path: tw/coverage
 
       # - uses: actions/cache@v1
       #   id: lib-node-modules-id
